@@ -66,20 +66,34 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--        原因：Tomcat10依赖jakarta.servlet-api，不是依赖javax.servlet-api和servlet-api-->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!--        <dependency>-->
         <!--            <groupId>javax.servlet</groupId>-->
         <!--            <artifactId>javax.servlet-api</artifactId>-->
+        <!--            <version>3.1.0</version>-->
+        <!--            <scope>provided</scope>-->
         <!--        </dependency>-->
         <!--        <dependency>-->
         <!--            <groupId>javax.servlet</groupId>-->
         <!--            <artifactId>jstl</artifactId>-->
         <!--        </dependency>-->
         <!--        <dependency>-->
+        <!--            <groupId>javax.servlet.jsp.jstl</groupId>-->
+        <!--            <artifactId>jstl-api</artifactId>-->
+        <!--            <version>1.2</version>-->
+        <!--        </dependency>-->
+<!--        <dependency>-->
         <!--            <groupId>org.apache.tomcat</groupId>-->
         <!--            <artifactId>jsp-api</artifactId>-->
         <!--            <version>6.0.36</version>-->
         <!--        </dependency>-->
-
 
 
         <!-- tool -->
