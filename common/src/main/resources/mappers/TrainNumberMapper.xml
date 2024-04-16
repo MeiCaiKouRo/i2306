@@ -139,4 +139,11 @@
             seat_num        = #{seatNum,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="getAll" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List"/>
+        from train_number
+
+    </select>
 </mapper>
