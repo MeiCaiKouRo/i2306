@@ -2,6 +2,7 @@ package com.next.controller;
 
 import com.next.common.JsonData;
 import com.next.dto.TrainStationDto;
+import com.next.param.TrainStationParam;
 import com.next.service.TrainCityService;
 import com.next.service.TrainStationService;
 import com.next.model.TrainCity;
@@ -51,13 +52,15 @@ public class TrainStationController {
 
     @ResponseBody
     @RequestMapping("/save.json")
-    public JsonData save() {
+    public JsonData save(TrainStationParam trainStationParam) {
+        trainStationService.save(trainStationParam);
         return JsonData.success();
     }
 
     @ResponseBody
     @RequestMapping("/update.json")
-    public JsonData update() {
+    public JsonData update(TrainStationParam trainStationParam) {
+        trainStationService.update(trainStationParam);
         return JsonData.success();
     }
 }

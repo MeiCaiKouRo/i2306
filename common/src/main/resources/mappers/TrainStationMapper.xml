@@ -68,10 +68,19 @@
             city_id = #{cityId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <select id="getAll" resultMap="BaseResultMap" >
+    <select id="getAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from train_station
     </select>
 
+    <select id="countByIdAndNameAndCityId" parameterType="map" resultType="int">
+        SELECT count(1)
+        FROM train_station
+        WHERE name = #{name}
+        AND city_id = #{cityId}
+        <if test="stationId != null">
+            AND id != #{stationId}
+        </if>
+    </select>
 </mapper>
