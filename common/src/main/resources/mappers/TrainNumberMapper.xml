@@ -144,6 +144,12 @@
         select
         <include refid="Base_Column_List"/>
         from train_number
+    </select>
 
+    <select id="findByName" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from train_number
+        WHERE name = #{name}
     </select>
 </mapper>
