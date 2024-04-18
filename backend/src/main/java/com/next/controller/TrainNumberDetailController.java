@@ -2,6 +2,7 @@ package com.next.controller;
 
 import com.next.common.JsonData;
 import com.next.dto.TrainNumberDetailDto;
+import com.next.param.TrainNumberDetailParam;
 import com.next.service.TrainNumberDetailService;
 import com.next.service.TrainNumberService;
 import com.next.service.TrainStationService;
@@ -51,7 +52,7 @@ public class TrainNumberDetailController {
             dto.setId(numberDetail.getId());
             dto.setFromStationId(numberDetail.getFromStationId());
             dto.setToStationId(numberDetail.getToStationId());
-            dto.setToStation(stationMap.get(numberDetail.getFromStationId()));
+            dto.setToStation(stationMap.get(numberDetail.getToStationId()));
             dto.setFromStation(stationMap.get(numberDetail.getFromStationId()));
             dto.setFromCityId(numberDetail.getFromCityId());
             dto.setToCityId(numberDetail.getToCityId());
@@ -68,7 +69,8 @@ public class TrainNumberDetailController {
 
     @ResponseBody
     @RequestMapping("/save.json")
-    public JsonData save() {
+    public JsonData save(TrainNumberDetailParam param) {
+        trainNumberDetailService.save(param);
         return JsonData.success();
     }
 
@@ -81,6 +83,7 @@ public class TrainNumberDetailController {
     @RequestMapping("/delete.json")
     @ResponseBody
     public JsonData delete(@RequestParam("id") Integer id) {
+        trainNumberDetailService.delete(id);
         return JsonData.success();
     }
 }

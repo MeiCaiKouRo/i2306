@@ -42,7 +42,7 @@ public class TrainNumberController {
             dto.setId(number.getId());
             dto.setFromStationId(number.getFromStationId());
             dto.setToStationId(number.getToStationId());
-            dto.setToStation(stationMap.get(number.getFromStationId()));
+            dto.setToStation(stationMap.get(number.getToStationId()));
             dto.setFromStation(stationMap.get(number.getFromStationId()));
             dto.setFromCityId(number.getFromCityId());
             dto.setToCityId(number.getToCityId());

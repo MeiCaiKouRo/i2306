@@ -157,6 +157,13 @@
         select
         <include refid="Base_Column_List"/>
         from train_number_detail
+    </select>
 
+    <select id="getByTrainNumberId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from train_number_detail
+        WHERE train_number_id = #{trainNumberId}
+        order by station_index asc
     </select>
 </mapper>
