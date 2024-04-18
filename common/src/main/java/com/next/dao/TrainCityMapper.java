@@ -1,6 +1,7 @@
 package com.next.dao;
 
 import com.next.model.TrainCity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface TrainCityMapper {
     int updateByPrimaryKey(TrainCity record);
 
     List<TrainCity> getAll();
+
+    int countByNameAndId(@Param("name")String name, @Param("trainCityId") Integer trainCityId);
+
 }

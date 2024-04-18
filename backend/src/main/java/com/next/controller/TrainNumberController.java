@@ -2,10 +2,10 @@ package com.next.controller;
 
 import com.next.common.JsonData;
 import com.next.dto.TrainNumberDto;
-import com.next.model.TrainNumber;
-import com.next.model.TrainStation;
 import com.next.service.TrainNumberService;
 import com.next.service.TrainStationService;
+import com.next.model.TrainNumber;
+import com.next.model.TrainStation;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
