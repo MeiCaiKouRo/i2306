@@ -106,7 +106,8 @@
         </dependency>
 
         <!--添加javafx的maven依赖-->
-        <!--从JDK 11开始，Oracle从JDK中移除了JavaFX，并在2011年将其开源，成为OpenJDK的一部分。现在，JavaFX的发展由OpenFX社区负责，该项目被称为OpenJFX-->
+        <!--从JDK11开始，Oracle从JDK中移除了JavaFX，并在2011年将其开源，成为OpenJDK的一部分。
+        现在，JavaFX的发展由OpenFX社区负责，该项目被称为OpenJFX-->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
