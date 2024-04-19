@@ -105,16 +105,24 @@
             <version>6.0.17.Final</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>javax.el</groupId>-->
-<!--            <artifactId>javax.el-api</artifactId>-->
-<!--            <version>3.0.0</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.glassfish</groupId>-->
-<!--            <artifactId>javax.el</artifactId>-->
-<!--            <version>3.0.0</version>-->
-<!--        </dependency>-->
+        <!--添加javafx的maven依赖-->
+        <!--从JDK 11开始，Oracle从JDK中移除了JavaFX，并在2011年将其开源，成为OpenJDK的一部分。现在，JavaFX的发展由OpenFX社区负责，该项目被称为OpenJFX-->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>javax.el</groupId>-->
+        <!--            <artifactId>javax.el-api</artifactId>-->
+        <!--            <version>3.0.0</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.glassfish</groupId>-->
+        <!--            <artifactId>javax.el</artifactId>-->
+        <!--            <version>3.0.0</version>-->
+        <!--        </dependency>-->
 
         <!-- 分库分表 -->
         <!-- 最开始 -->
