@@ -17,6 +17,4 @@ public interface DataSources {
     String TRAIN_SEAT_DB_4 = "trainSeatDB4";
 
     String TRAIN_SEAT_DB_5 = "trainSeatDB5";
-
-
 }

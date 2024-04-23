@@ -8,7 +8,7 @@
         <result column="traveller_id" property="travellerId" jdbcType="BIGINT"/>
         <result column="train_number_id" property="trainNumberId" jdbcType="INTEGER"/>
         <result column="carriage_number" property="carriageNumber" jdbcType="INTEGER"/>
-        <result column="row_number" property="rowNumber" jdbcType="INTEGER"/>
+        <result column="row_number_extend" property="rowNumber" jdbcType="INTEGER"/>
         <result column="seat_number" property="seatNumber" jdbcType="INTEGER"/>
         <result column="seat_level" property="seatLevel" jdbcType="INTEGER"/>
         <result column="train_start" property="trainStart" jdbcType="TIMESTAMP"/>
@@ -21,7 +21,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         id
-        , ticket, user_id, traveller_id, train_number_id, carriage_number, row_number,
+        , ticket, user_id, traveller_id, train_number_id, carriage_number, row_number_extend,
     seat_number, seat_level, train_start, train_end, money, show_number, status, from_station_id, 
     to_station_id
     </sql>
@@ -39,7 +39,7 @@
     <insert id="insert" parameterType="com.next.model.TrainSeat">
         insert into train_seat (id, ticket, user_id,
                                 traveller_id, train_number_id, carriage_number,
-                                row_number, seat_number, seat_level,
+                                row_number_extend, seat_number, seat_level,
                                 train_start, train_end, money,
                                 show_number, status, from_station_id,
                                 to_station_id)
@@ -72,7 +72,7 @@
                 carriage_number,
             </if>
             <if test="rowNumber != null">
-                row_number,
+                row_number_extend,
             </if>
             <if test="seatNumber != null">
                 seat_number,
@@ -172,7 +172,7 @@
                 carriage_number = #{carriageNumber,jdbcType=INTEGER},
             </if>
             <if test="rowNumber != null">
-                row_number = #{rowNumber,jdbcType=INTEGER},
+                row_number_extend = #{rowNumber,jdbcType=INTEGER},
             </if>
             <if test="seatNumber != null">
                 seat_number = #{seatNumber,jdbcType=INTEGER},
@@ -206,29 +206,27 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="com.next.model.TrainSeat">
         update train_seat
-        set ticket          = #{ticket,jdbcType=VARCHAR},
-            user_id         = #{userId,jdbcType=BIGINT},
-            traveller_id    = #{travellerId,jdbcType=BIGINT},
-            train_number_id = #{trainNumberId,jdbcType=INTEGER},
-            carriage_number = #{carriageNumber,jdbcType=INTEGER},
-            row_number      = #{rowNumber,jdbcType=INTEGER},
-            seat_number     = #{seatNumber,jdbcType=INTEGER},
-            seat_level      = #{seatLevel,jdbcType=INTEGER},
-            train_start     = #{trainStart,jdbcType=TIMESTAMP},
-            train_end       = #{trainEnd,jdbcType=TIMESTAMP},
-            money           = #{money,jdbcType=INTEGER},
-            show_number     = #{showNumber,jdbcType=VARCHAR},
-            status          = #{status,jdbcType=INTEGER},
-            from_station_id = #{fromStationId,jdbcType=INTEGER},
-            to_station_id   = #{toStationId,jdbcType=INTEGER}
+        set ticket            = #{ticket,jdbcType=VARCHAR},
+            user_id           = #{userId,jdbcType=BIGINT},
+            traveller_id      = #{travellerId,jdbcType=BIGINT},
+            train_number_id   = #{trainNumberId,jdbcType=INTEGER},
+            carriage_number   = #{carriageNumber,jdbcType=INTEGER},
+            row_number_extend = #{rowNumber,jdbcType=INTEGER},
+            seat_number       = #{seatNumber,jdbcType=INTEGER},
+            seat_level        = #{seatLevel,jdbcType=INTEGER},
+            train_start       = #{trainStart,jdbcType=TIMESTAMP},
+            train_end         = #{trainEnd,jdbcType=TIMESTAMP},
+            money             = #{money,jdbcType=INTEGER},
+            show_number       = #{showNumber,jdbcType=VARCHAR},
+            status            = #{status,jdbcType=INTEGER},
+            from_station_id   = #{fromStationId,jdbcType=INTEGER},
+            to_station_id     = #{toStationId,jdbcType=INTEGER}
         where id = #{id,jdbcType=BIGINT}
     </update>
     <insert id="batchInsert" parameterType="list">
-        insert into train_seat (ticket, train_number_id, carriage_number,
-        row_number, seat_number, seat_level,
-        train_start, train_end, money,
-        show_number, status, from_station_id,
-        to_station_id)
+        insert into train_seat(ticket,train_number_id,carriage_number,row_number_extend,
+        seat_number,seat_level,train_start,train_end,money,show_number,status,
+        from_station_id,to_station_id)
         values
         <foreach collection="list" item="detail" separator=",">
             (#{detail.ticket,jdbcType=VARCHAR}, #{detail.trainNumberId,jdbcType=INTEGER},
@@ -242,4 +240,55 @@
             #{detail.toStationId,jdbcType=INTEGER})
         </foreach>
     </insert>
+
+    <select id="searchList" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM train_seat
+        WHERE train_number_id = #{trainNumberId}
+        AND ticket = #{ticket}
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="carriageNum != null">
+            AND carriage_number = #{carriageNum}
+        </if>
+        <if test="rowNum != null">
+            AND row_number_extend = #{rowNum}
+        </if>
+        <if test="seatNum != null">
+            AND seat_number = #{seatNum}
+        </if>
+        LIMIT #{offset},#{pageSize}
+    </select>
+
+    <select id="countList" parameterType="map" resultType="int">
+        SELECT count(1)
+        FROM train_seat
+        WHERE train_number_id = #{trainNumberId}
+        AND ticket = #{ticket}
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        <if test="carriageNum != null">
+            AND carriage_number = #{carriageNum}
+        </if>
+        <if test="rowNum != null">
+            AND row_number_extend = #{rowNum}
+        </if>
+        <if test="seatNum != null">
+            AND seat_number = #{seatNum}
+        </if>
+    </select>
+
+    <update id="batchPublish" parameterType="map">
+        UPDATE train_seat
+        SET status = 1
+        WHERE id IN
+        <foreach collection="trainSeatIdList" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        AND train_number_id = #{trainNumberId}
+        AND status = 0
+    </update>
 </mapper>

@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import io.shardingsphere.api.algorithm.masterslave.RoundRobinMasterSlaveLoadBalanceAlgorithm;
 import io.shardingsphere.api.config.rule.MasterSlaveRuleConfiguration;
 import io.shardingsphere.shardingjdbc.api.MasterSlaveDataSourceFactory;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -23,10 +24,10 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Properties;
 
+@Mapper
 @Configuration
 @MapperScan(basePackages = "com.next.dao", sqlSessionTemplateRef = "sqlSessionTemplate")
 public class BasicDataSourceConfig {
-
 
     @Primary
     @Bean(name = DataSources.MASTER_DB)
@@ -42,31 +43,30 @@ public class BasicDataSourceConfig {
     }
 
     @Bean(name = "masterSlaveDataSource")
-    public DataSource masterSlaveDataSource(@Qualifier(DataSources.MASTER_DB) DataSource masterDataSource,
-                                            @Qualifier(DataSources.SLAVE_DB) DataSource slaveDataSource) throws SQLException {
-
+    public DataSource masterSlaveDataSource(@Qualifier(DataSources.MASTER_DB) DataSource masterDB,
+                                            @Qualifier(DataSources.SLAVE_DB) DataSource slaveDB) throws SQLException{
         Map<String, DataSource> map = Maps.newHashMap();
-        map.put(DataSources.MASTER_DB, masterDataSource);
-        map.put(DataSources.SLAVE_DB, slaveDataSource);
+        map.put(DataSources.MASTER_DB, masterDB);
+        map.put(DataSources.SLAVE_DB, slaveDB);
 
-        MasterSlaveRuleConfiguration masterSlaveRuleConfiguration = new MasterSlaveRuleConfiguration(
-                "ds_master_slave",
-                DataSources.MASTER_DB,
-                Lists.newArrayList(DataSources.SLAVE_DB),
-                new RoundRobinMasterSlaveLoadBalanceAlgorithm()
-        );
-        return MasterSlaveDataSourceFactory.createDataSource(map, masterSlaveRuleConfiguration, Maps.newHashMap(), new Properties());
+        MasterSlaveRuleConfiguration masterSlaveRuleConfiguration =
+                new MasterSlaveRuleConfiguration("ds_master_slave",
+                        DataSources.MASTER_DB,
+                        Lists.newArrayList(DataSources.SLAVE_DB),
+                        new RoundRobinMasterSlaveLoadBalanceAlgorithm()
+                );
+        return MasterSlaveDataSourceFactory.createDataSource(map, masterSlaveRuleConfiguration,
+                Maps.newHashMap(), new Properties());
     }
 
-
-    @Bean
     @Primary
-    public DataSourceTransactionManager transactionManager(@Qualifier(DataSources.MASTER_DB) DataSource masterDataSource){
-        return new DataSourceTransactionManager(masterDataSource);
+    @Bean
+    public DataSourceTransactionManager transactionManager(@Qualifier(DataSources.MASTER_DB) DataSource masterDB) {
+        return new DataSourceTransactionManager(masterDB);
     }
 
-    @Bean
     @Primary
+    @Bean
     public SqlSessionFactory sqlSessionFactory(@Qualifier(DataSources.MASTER_DB) DataSource masterDB) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(masterDB);
@@ -80,3 +80,4 @@ public class BasicDataSourceConfig {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 }
+

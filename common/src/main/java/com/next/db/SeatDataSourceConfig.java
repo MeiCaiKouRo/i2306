@@ -1,6 +1,5 @@
 package com.next.db;
 
-
 import com.google.common.collect.Maps;
 import io.shardingsphere.api.config.rule.ShardingRuleConfiguration;
 import io.shardingsphere.api.config.rule.TableRuleConfiguration;
@@ -27,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @MapperScan(basePackages = "com.next.seatDao", sqlSessionTemplateRef = "trainSeatSqlSessionTemplate")
 public class SeatDataSourceConfig {
-
 
     @Bean(name = DataSources.TRAIN_SEAT_DB_1)
     @ConfigurationProperties(prefix = "spring.datasource-seat-1")
@@ -59,17 +57,16 @@ public class SeatDataSourceConfig {
         return DataSourceBuilder.create().build();
     }
 
-
     @Bean(name = "trainSeatShardingDataSource")
     public DataSource trainSeatShardingDataSource(@Qualifier(DataSources.TRAIN_SEAT_DB_1) DataSource trainSeatDB1,
                                                   @Qualifier(DataSources.TRAIN_SEAT_DB_2) DataSource trainSeatDB2,
                                                   @Qualifier(DataSources.TRAIN_SEAT_DB_3) DataSource trainSeatDB3,
                                                   @Qualifier(DataSources.TRAIN_SEAT_DB_4) DataSource trainSeatDB4,
-                                                  @Qualifier(DataSources.TRAIN_SEAT_DB_5) DataSource trainSeatDB5) throws SQLException {
-
-
+                                                  @Qualifier(DataSources.TRAIN_SEAT_DB_5) DataSource trainSeatDB5
+    ) throws SQLException {
         ShardingRuleConfiguration shardingRuleConfiguration = new ShardingRuleConfiguration();
 
+        // 设置分库的映射
         Map<String, DataSource> dataSourceMap = Maps.newHashMap();
         dataSourceMap.put(DataSources.TRAIN_SEAT_DB_1, trainSeatDB1);
         dataSourceMap.put(DataSources.TRAIN_SEAT_DB_2, trainSeatDB2);
@@ -77,6 +74,7 @@ public class SeatDataSourceConfig {
         dataSourceMap.put(DataSources.TRAIN_SEAT_DB_4, trainSeatDB4);
         dataSourceMap.put(DataSources.TRAIN_SEAT_DB_5, trainSeatDB5);
 
+        // 设置表策略
         TableRuleConfiguration tableRuleConfiguration = new TableRuleConfiguration();
         // 1\6 DB1
         // 2\7 DB2
@@ -96,32 +94,34 @@ public class SeatDataSourceConfig {
                         DataSources.TRAIN_SEAT_DB_4 + ".train_seat_9," +
                         DataSources.TRAIN_SEAT_DB_5 + ".train_seat_10"
         );
-        //设置分库策略
-        tableRuleConfiguration.setDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration("train_number_id", new TrainSeatDatabaseShardingAlgorithm()));
-        //设置分表策略
-        tableRuleConfiguration.setTableShardingStrategyConfig(new StandardShardingStrategyConfiguration("train_number_id", new TrainSeatTableShardingAlgorithm()));
+        // 设置分库策略
+        tableRuleConfiguration.setDatabaseShardingStrategyConfig(new StandardShardingStrategyConfiguration(
+                "train_number_id", new TrainSeatDatabaseShardingAlgorithm()));
+        // 设置分表策略
+        tableRuleConfiguration.setTableShardingStrategyConfig(new StandardShardingStrategyConfiguration(
+                "train_number_id", new TrainSeatTableShardingAlgorithm()));
+
         shardingRuleConfiguration.getTableRuleConfigs().add(tableRuleConfiguration);
 
-        return ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfiguration, new ConcurrentHashMap<>(), new Properties());
-
+        return ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfiguration, new ConcurrentHashMap(), new Properties());
     }
 
     @Bean(name = "trainSeatTransactionManager")
-    public DataSourceTransactionManager trainSeatTransactionManager(@Qualifier("trainSeatShardingDataSource") DataSource dataSource){
+    public DataSourceTransactionManager trainSeatTransactionManager(@Qualifier("trainSeatShardingDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
     @Bean(name = "trainSeatSqlSessionFactory")
-    public SqlSessionFactory trainSeatSqlSessionFactory(@Qualifier("trainSeatShardingDataSource")DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource);
-        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:seatMappers/*.xml"));
-        return sqlSessionFactoryBean.getObject();
+    public SqlSessionFactory trainSeatSqlSessionFactory(@Qualifier("trainSeatShardingDataSource") DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+        bean.setDataSource(dataSource);
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:seatMappers/*.xml"));
+        return bean.getObject();
     }
-
 
     @Bean(name = "trainSeatSqlSessionTemplate")
-    public SqlSessionTemplate trainSeatSqlSessionTemplate(@Qualifier("trainSeatSqlSessionFactory") SqlSessionFactory trainSeatSqlSessionFactory) {
+    public SqlSessionTemplate sqlSessionTemplate(@Qualifier("trainSeatSqlSessionFactory") SqlSessionFactory trainSeatSqlSessionFactory) {
         return new SqlSessionTemplate(trainSeatSqlSessionFactory);
     }
+
 }
