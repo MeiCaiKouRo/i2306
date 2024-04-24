@@ -1,6 +1,9 @@
 package com.next.dao;
 
 import com.next.model.TrainUserTraveller;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TrainUserTravellerMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,7 @@ public interface TrainUserTravellerMapper {
     int updateByPrimaryKeySelective(TrainUserTraveller record);
 
     int updateByPrimaryKey(TrainUserTraveller record);
+
+    List<Long> getByUserId(@Param("userId") long userId);
+
 }
