@@ -89,7 +89,7 @@
         <!--            <artifactId>jstl-api</artifactId>-->
         <!--            <version>1.2</version>-->
         <!--        </dependency>-->
-<!--        <dependency>-->
+        <!--        <dependency>-->
         <!--            <groupId>org.apache.tomcat</groupId>-->
         <!--            <artifactId>jsp-api</artifactId>-->
         <!--            <version>6.0.36</version>-->
@@ -205,22 +205,33 @@
             <version>4.1.1</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.apache.shardingsphere</groupId>-->
-<!--            <artifactId>shardingsphere-jdbc-core</artifactId>-->
-<!--            <version>5.4.1</version>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>shardingsphere-infra-util</artifactId>-->
-<!--                    <groupId>org.apache.shardingsphere</groupId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.shardingsphere</groupId>-->
-<!--            <artifactId>shardingsphere-infra-spi</artifactId>-->
-<!--            <version>5.4.1</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.shardingsphere</groupId>-->
+        <!--            <artifactId>shardingsphere-jdbc-core</artifactId>-->
+        <!--            <version>5.4.1</version>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <artifactId>shardingsphere-infra-util</artifactId>-->
+        <!--                    <groupId>org.apache.shardingsphere</groupId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.shardingsphere</groupId>-->
+        <!--            <artifactId>shardingsphere-infra-spi</artifactId>-->
+        <!--            <version>5.4.1</version>-->
+        <!--        </dependency>-->
+
+        <!-- rabbitmq -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-amqp</artifactId>
+            <version>2.2.3.RELEASE</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
