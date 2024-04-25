@@ -304,6 +304,7 @@
             #{fromStationId}
         </foreach>
         and status = 1
+        and ticket=#{ticket}
         order by train_start asc
     </select>
     <update id="batchPlace" >

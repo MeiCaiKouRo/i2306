@@ -50,56 +50,56 @@ public class TrainOrderService {
         }
     }
 
-//    public List<TrainOrder> getOrderList(long userId) {
-//        return trainOrderMapper.getByUserId(userId);
-//    }
-//
-//    public List<TrainOrderDetail> getOrderDetailList(List<String> parentOrderIdList) {
-//        return trainOrderDetailMapper.getByParentOrderIdList(parentOrderIdList);
-//    }
-//
-//    public void payOrder(PayOrderParam param, long userId) {
-//        BeanValidator.check(param);
-//        TrainOrder trainOrder = trainOrderMapper.findByOrderId(param.getOrderId());
-//        if (trainOrder == null) {
-//            throw new BusinessException("未查询到该订单");
-//        }
-//        if (trainOrder.getUserId() != userId) {
-//            throw new BusinessException("不允许操作他人的订单");
-//        }
-//        if (trainOrder.getStatus() != 10) {
-//            throw new BusinessException("订单不合法，请刷新后操作");
-//        }
-//        trainOrder.setStatus(20);
-//        trainOrderMapper.updateByPrimaryKeySelective(trainOrder);
-//
-//        MessageBody messageBody = new MessageBody();
-//        messageBody.setTopic(QueueTopic.ORDER_PAY_SUCCESS);
-//        messageBody.setDetail(JsonMapper.obj2String(trainOrder));
-//        rabbitMqClient.send(messageBody);
-//    }
-//
-//    public void cancelOrder(CancelOrderParam param, long userId) {
-//        BeanValidator.check(param);
-//        TrainOrder trainOrder = trainOrderMapper.findByOrderId(param.getOrderId());
-//        if (trainOrder == null) {
-//            throw new BusinessException("未查询到该订单");
-//        }
-//        if (trainOrder.getUserId() != userId) {
-//            throw new BusinessException("不允许操作他人的订单");
-//        }
-//        if (trainOrder.getStatus() != 20) {
-//            throw new BusinessException("订单不合法，请刷新后操作");
-//        }
-//        if (trainOrder.getTrainStart().before(new Date())) {
-//            throw new BusinessException("订单已经过了可取消的时间段");
-//        }
-//        trainOrder.setStatus(40);
-//        trainOrderMapper.updateByPrimaryKeySelective(trainOrder);
-//
-//        MessageBody messageBody = new MessageBody();
-//        messageBody.setTopic(QueueTopic.ORDER_CANCEL);
-//        messageBody.setDetail(JsonMapper.obj2String(trainOrder));
-//        rabbitMqClient.send(messageBody);
-//    }
+    public List<TrainOrder> getOrderList(long userId) {
+        return trainOrderMapper.getByUserId(userId);
+    }
+
+    public List<TrainOrderDetail> getOrderDetailList(List<String> parentOrderIdList) {
+        return trainOrderDetailMapper.getByParentOrderIdList(parentOrderIdList);
+    }
+
+    public void payOrder(PayOrderParam param, long userId) {
+        BeanValidator.check(param);
+        TrainOrder trainOrder = trainOrderMapper.findByOrderId(param.getOrderId());
+        if (trainOrder == null) {
+            throw new BusinessException("未查询到该订单");
+        }
+        if (trainOrder.getUserId() != userId) {
+            throw new BusinessException("不允许操作他人的订单");
+        }
+        if (trainOrder.getStatus() != 10) {
+            throw new BusinessException("订单不合法，请刷新后操作");
+        }
+        trainOrder.setStatus(20);
+        trainOrderMapper.updateByPrimaryKeySelective(trainOrder);
+
+        MessageBody messageBody = new MessageBody();
+        messageBody.setTopic(QueueTopic.ORDER_PAY_SUCCESS);
+        messageBody.setDetail(JsonMapper.obj2String(trainOrder));
+        rabbitMqClient.send(messageBody);
+    }
+
+    public void cancelOrder(CancelOrderParam param, long userId) {
+        BeanValidator.check(param);
+        TrainOrder trainOrder = trainOrderMapper.findByOrderId(param.getOrderId());
+        if (trainOrder == null) {
+            throw new BusinessException("未查询到该订单");
+        }
+        if (trainOrder.getUserId() != userId) {
+            throw new BusinessException("不允许操作他人的订单");
+        }
+        if (trainOrder.getStatus() != 20) {
+            throw new BusinessException("订单不合法，请刷新后操作");
+        }
+        if (trainOrder.getTrainStart().before(new Date())) {
+            throw new BusinessException("订单已经过了可取消的时间段");
+        }
+        trainOrder.setStatus(40);
+        trainOrderMapper.updateByPrimaryKeySelective(trainOrder);
+
+        MessageBody messageBody = new MessageBody();
+        messageBody.setTopic(QueueTopic.ORDER_CANCEL);
+        messageBody.setDetail(JsonMapper.obj2String(trainOrder));
+        rabbitMqClient.send(messageBody);
+    }
 }

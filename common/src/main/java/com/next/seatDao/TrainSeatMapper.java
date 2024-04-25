@@ -33,7 +33,7 @@ public interface TrainSeatMapper {
 
     List<TrainSeat> getToPlaceSeatList(@Param("trainNumberId") int trainNumberId, @Param("carriageNum") Integer carriageNum,
                                        @Param("rowNum") Integer rowNum, @Param("seatNum") Integer seatNum,
-                                       @Param("fromStationIdList") List<Integer> fromStationIdList);
+                                       @Param("fromStationIdList") List<Integer> fromStationIdList,@Param("ticket") String ticket);
 
     int batchPlace(@Param("trainNumberId") int trainNumberId, @Param("idList") List<Long> idList,
                    @Param("travellerId") long travellerId, @Param("userId") long userId);

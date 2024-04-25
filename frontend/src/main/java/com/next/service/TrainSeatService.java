@@ -302,7 +302,6 @@ public class TrainSeatService {
      * 4、@Transactional 同一个类中两个方法
      * 5、@Transactional 触发的异常被 catch 住了
      * 6、数据库引擎不支持事务
-     *
      */
     @Transactional(rollbackFor = Exception.class)
     public void saveOrder(TrainOrder trainOrder, List<TrainOrderDetail> orderDetailList) {
@@ -374,7 +373,7 @@ public class TrainSeatService {
         List<Integer> fromStationIdList = targetDetailList.stream().map(detail -> detail.getFromStationId()).collect(Collectors.toList());
         List<TrainSeat> toUpdateSeatList = trainSeatMapper.getToPlaceSeatList(
                 trainSeat.getTrainNumberId(), trainSeat.getCarriageNumber(), trainSeat.getRowNumber(),
-                trainSeat.getSeatNumber(), fromStationIdList);
+                trainSeat.getSeatNumber(), fromStationIdList, ticket);
         if (targetDetailList.size() != toUpdateSeatList.size()) { // 要占座的座位不够，可能是某个车次详情的座位刚才被占了
             return null;
         }
