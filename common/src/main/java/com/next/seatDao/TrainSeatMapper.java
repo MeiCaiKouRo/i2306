@@ -31,5 +31,14 @@ public interface TrainSeatMapper {
 
     int batchPublish(@Param("trainNumberId") int trainNumberId, @Param("trainSeatIdList") List<Long> trainSeatIdList);
 
+    List<TrainSeat> getToPlaceSeatList(@Param("trainNumberId") int trainNumberId, @Param("carriageNum") Integer carriageNum,
+                                       @Param("rowNum") Integer rowNum, @Param("seatNum") Integer seatNum,
+                                       @Param("fromStationIdList") List<Integer> fromStationIdList);
 
+    int batchPlace(@Param("trainNumberId") int trainNumberId, @Param("idList") List<Long> idList,
+                   @Param("travellerId") long travellerId, @Param("userId") long userId);
+
+    int batchRollbackPlace(@Param("trainSeat") TrainSeat trainSeat, @Param("fromStationIdList") List<Integer> fromStationIdList);
 }
+
+

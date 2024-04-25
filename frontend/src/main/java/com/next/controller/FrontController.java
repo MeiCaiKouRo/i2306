@@ -1,7 +1,10 @@
 package com.next.controller;
 
 import com.next.common.JsonData;
+import com.next.common.RequestHolder;
 import com.next.dto.TrainNumberLeftDto;
+import com.next.model.TrainUser;
+import com.next.param.GrabTicketParam;
 import com.next.param.SearchLeftCountParam;
 import com.next.service.TrainSeatService;
 import jakarta.annotation.Resource;
@@ -30,6 +33,13 @@ public class FrontController {
             log.error("searchLeftCount exception, param:{}", param, e);
             return JsonData.fail("查询异常，请稍后尝试");
         }
+    }
+
+    @RequestMapping("/grab.json")
+    @ResponseBody
+    public JsonData grabTicket(GrabTicketParam param) {
+        TrainUser trainUser = RequestHolder.getCurrentUser();
+        return JsonData.success(trainSeatService.grabTicket(param, trainUser));
     }
 
 }
