@@ -271,6 +271,8 @@ public class TrainSeatService {
 
         log.info("saveOrder success, order:{}", trainOrder);
 
+        //  订单超时未支付处理
+
         // 发送订单创建成功消息：处理消息时候给用户发短信等等
         MessageBody messageBody1 = new MessageBody();
         messageBody1.setTopic(QueueTopic.ORDER_CREATE);

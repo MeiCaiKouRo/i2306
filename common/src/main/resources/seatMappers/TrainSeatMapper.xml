@@ -330,4 +330,19 @@
         and user_id = #{trainSeat.userId}
         and status = 2
     </update>
+
+    <update id="cancelSeat">
+        UPDATE train_seat
+        SET status       = 1,
+            traveller_id = 0,
+            user_id      = 0
+        where
+          train_number_id = #{trainNumberId}
+          and carriage_number = #{carriageNumber}
+          and row_number_extend = #{rowNumber}
+          and seat_number = #{seatNumber}
+          and traveller_id = #{travellerId}
+          and user_id = #{userId}
+          and ticket=#{ticket}
+    </update>
 </mapper>

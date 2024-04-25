@@ -280,4 +280,14 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="getByParentOrderIdList" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from train_order_detail
+    where parent_order_id in
+    <foreach collection="parentOrderIdList" open="(" close=")" separator="," item="parentOrderId">
+      #{parentOrderId}
+    </foreach>
+    order by id desc
+  </select>
 </mapper>

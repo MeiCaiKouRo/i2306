@@ -2,6 +2,8 @@ package com.next.mq;
 
 
 import com.next.dto.RollbackSeatDto;
+import com.next.model.TrainOrder;
+import com.next.service.TrainOrderService;
 import com.next.service.TrainSeatService;
 import com.next.util.JsonMapper;
 import jakarta.annotation.Resource;
@@ -17,6 +19,9 @@ public class RabbitDelayMqServer {
 
     @Resource
     private TrainSeatService trainSeatService;
+    @Resource
+    private TrainOrderService trainOrderService;
+
 
     @RabbitListener(queues = QueueConstants.DELAY_QUEUE)
     public void receive(String message) {
@@ -35,6 +40,11 @@ public class RabbitDelayMqServer {
                     RollbackSeatDto dto = JsonMapper.string2Obj(messageBody.getDetail(), new TypeReference<RollbackSeatDto>() {
                     });
                     trainSeatService.batchRollbackSeat(dto.getTrainSeat(), dto.getFromStationIdList(), messageBody.getDelay());
+                    break;
+                case QueueTopic.ORDER_PAY_DELAY_CHECK:
+                    TrainOrder trainOrder = JsonMapper.string2Obj(messageBody.getDetail(), new TypeReference<TrainOrder>() {
+                    });
+                    trainOrderService.delayCheckOrder(trainOrder);
                     break;
                 default:
                     log.warn("delay queue receive message, {}, no need handle", message);

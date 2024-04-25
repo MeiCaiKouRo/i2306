@@ -39,6 +39,12 @@ public interface TrainSeatMapper {
                    @Param("travellerId") long travellerId, @Param("userId") long userId);
 
     int batchRollbackPlace(@Param("trainSeat") TrainSeat trainSeat, @Param("fromStationIdList") List<Integer> fromStationIdList);
+
+
+    void cancelSeat(@Param("trainNumberId")int trainNumberId,@Param("ticket") String ticket,
+                    @Param("carriageNum") Integer carriageNum,@Param("rowNum") Integer rowNum,
+                    @Param("seatNum") Integer seatNum, @Param("userId") long userId,
+                    @Param("travellerId") long travellerId);
 }
 
 
