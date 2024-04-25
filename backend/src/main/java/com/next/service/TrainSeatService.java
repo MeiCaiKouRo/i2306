@@ -139,7 +139,21 @@ public class TrainSeatService {
         transactionService.batchInsertSeat(list);
     }
 
-    // 这种写法是错误的，请一定重视
+    // 这种写法是错误的，请一定重视 同一个类调用了2个方法；不生效
+
+    // 需要注意 @Transactional 存在不生效的场景
+
+    /**
+     * 1、@Transactional 作用在 非public方法
+     * 2、@Transactional 的 propagation配置错误
+     * 3、@Transactional rollbackFor 配置错误
+     * 4、@Transactional 同一个类中两个方法
+     * 5、@Transactional 触发的异常被 catch 住了
+     * 6、数据库引擎不支持事务
+     *
+     */
+
+
     @Transactional(rollbackFor = Exception.class)
     public void batchInsertSeat(List<TrainSeat> list) {
         List<List<TrainSeat>> trainTicketPartitionList = Lists.partition(list, 1000);

@@ -208,7 +208,7 @@ public class TrainSeatService {
             if (tmpTrainSeat == null) {
                 break;
             }
-
+            // 保存订单及订单详情
             TrainSeatLevel seatLevel = TrainTypeSeatConstant.getSeatLevel(trainType, tmpTrainSeat.getCarriageNumber());
             // 生成订单详情
             TrainOrderDetail trainOrderDetail = TrainOrderDetail.builder()
@@ -292,6 +292,16 @@ public class TrainSeatService {
     }
 
     // 注意：这种写法是错误的，一定要重视
+
+    /**
+     * 1、@Transactional 作用在 非public方法
+     * 2、@Transactional 的 propagation配置错误
+     * 3、@Transactional rollbackFor 配置错误
+     * 4、@Transactional 同一个类中两个方法
+     * 5、@Transactional 触发的异常被 catch 住了
+     * 6、数据库引擎不支持事务
+     *
+     */
     @Transactional(rollbackFor = Exception.class)
     public void saveOrder(TrainOrder trainOrder, List<TrainOrderDetail> orderDetailList) {
         for (TrainOrderDetail orderDetail : orderDetailList) {
